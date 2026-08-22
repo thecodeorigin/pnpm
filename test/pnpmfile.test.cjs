@@ -10,7 +10,7 @@ test('local hook packs the package without applying its catalog to itself', () =
   assert.equal(localPlugin.hooks.beforePacking, plugin.hooks.beforePacking)
 })
 
-test('adds the shared catalog and preserves unrelated local entries', () => {
+test('adds the shared catalog and preserves project overrides', () => {
   const config = {
     catalogs: {
       default: {
@@ -23,7 +23,8 @@ test('adds the shared catalog and preserves unrelated local entries', () => {
   const result = plugin.hooks.updateConfig(config)
 
   assert.equal(result.catalogs.default.local, '1.0.0')
-  assert.equal(result.catalogs.default.zod, '^4.3.6')
+  assert.equal(result.catalogs.default.zod, '0.0.1')
+  assert.equal(result.catalogs.default.nuxt, '^4.4.2')
 })
 
 test('turns source dependencies into a dependency-free packed catalog', () => {

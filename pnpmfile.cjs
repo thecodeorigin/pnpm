@@ -11,8 +11,8 @@ module.exports = {
     updateConfig(config) {
       config.catalogs ??= {}
       config.catalogs.default = {
-        ...(config.catalogs.default ?? {}),
         ...getCatalog(),
+        ...(config.catalogs.default ?? {}),
       }
       return config
     },

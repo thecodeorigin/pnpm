@@ -25,6 +25,8 @@ pnpm add --config @thecodeorigin/pnpm-plugin-shared
 ```
 
 The `pnpm-plugin-*` name makes pnpm load the shared catalog hook automatically.
+Existing project catalog entries take precedence, so repositories can adopt the
+shared versions incrementally without an install changing their dependency graph.
 
 Then consume shared versions normally:
 
