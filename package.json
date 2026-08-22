@@ -1,5 +1,5 @@
 {
-  "name": "@thecodeorigin/pnpm",
+  "name": "@thecodeorigin/pnpm-plugin-shared",
   "version": "0.0.0-development",
   "description": "Shared pnpm catalogs and configuration for THECODEORIGIN projects",
   "license": "MIT",
@@ -15,9 +15,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "pnpm@10.34.5",
+  "packageManager": "pnpm@11.22.0",
   "engines": {
-    "pnpm": ">=10.34.4 <11"
+    "pnpm": ">=11.8.0"
   },
   "scripts": {
     "build:package": "node scripts/build-package.mjs",
