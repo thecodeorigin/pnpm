@@ -14,6 +14,10 @@ module.exports = {
         ...getCatalog(),
         ...(config.catalogs.default ?? {}),
       }
+      config.trustPolicyExclude = [
+        '@thecodeorigin/*',
+        ...(config.trustPolicyExclude ?? []).filter(pattern => pattern !== '@thecodeorigin/*'),
+      ]
       return config
     },
 
