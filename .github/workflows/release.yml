@@ -28,7 +28,7 @@ jobs:
           deployment-kind: production
           keys: '["ECOSYSTEM_CHECKOUT_TOKEN"]'
       - name: Check out, install, and check the pinned workspace
-        uses: thecodeorigin/actions/ecosystem-workspace@bbe1e137484e07f6e7424dde12c0c7d7207ff425
+        uses: thecodeorigin/actions/ecosystem-workspace@ff6f47328caed0d95d24e9b550ead80ddbd8d9e9
         with:
           ecosystem-sha: ${{ inputs.ecosystem-sha }}
           project-path: configs/pnpm
