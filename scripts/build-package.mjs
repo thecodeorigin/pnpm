@@ -5,11 +5,11 @@ const root = resolve(import.meta.dirname, '..')
 const output = resolve(root, 'dist')
 const source = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'))
 
-if (!source.dependencies || Object.keys(source.dependencies).length === 0) {
-  throw new Error('package.json dependencies must contain at least one catalog entry')
+if (!source.catalog || Object.keys(source.catalog).length === 0) {
+  throw new Error('package.json catalog must contain at least one entry')
 }
 
-for (const [name, version] of Object.entries(source.dependencies)) {
+for (const [name, version] of Object.entries(source.catalog)) {
   if (version.startsWith('catalog:')) {
     throw new Error(`${name} must use a literal version in the source catalog`)
   }
@@ -24,7 +24,7 @@ const manifest = {
   files: source.files,
   repository: source.repository,
   publishConfig: source.publishConfig,
-  catalog: source.dependencies,
+  catalog: source.catalog,
 }
 
 await rm(output, { recursive: true, force: true })

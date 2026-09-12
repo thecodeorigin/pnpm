@@ -22,7 +22,7 @@ module.exports = {
     },
 
     beforePacking(pkg) {
-      pkg.catalog = pkg.dependencies ?? {}
+      pkg.catalog = getCatalog()
       delete pkg.dependencies
       delete pkg.devDependencies
       delete pkg.engines

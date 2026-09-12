@@ -1,10 +1,12 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      ecosystem-sha:
+        description: Exact ecosystem commit that pins this project commit
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -17,19 +19,26 @@ jobs:
     if: github.repository == 'thecodeorigin/pnpm'
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
+      - name: Load ecosystem checkout credential from Vault
+        uses: thecodeorigin/actions/vault-environment@4bff26b9e9ac41c293f82a294a5eb2a262648a87
         with:
-          fetch-depth: 0
-      - uses: pnpm/setup@v1
-      - uses: actions/setup-node@v6
+          token: ${{ secrets.THECODEORIGIN_VAULT_TOKEN }}
+          project: pnpm
+          environment: production
+          deployment-kind: production
+          keys: '["ECOSYSTEM_CHECKOUT_TOKEN"]'
+      - name: Check out, install, and check the pinned workspace
+        uses: thecodeorigin/actions/ecosystem-workspace@bbe1e137484e07f6e7424dde12c0c7d7207ff425
         with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm check
-      - run: pnpm build:package
-      - run: pnpm release
+          ecosystem-sha: ${{ inputs.ecosystem-sha }}
+          project-path: configs/pnpm
+          operation: check
+      - name: Build package
+        working-directory: ecosystem/configs/pnpm
+        run: pnpm build:package
+      - name: Release package
+        working-directory: ecosystem/configs/pnpm
+        run: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

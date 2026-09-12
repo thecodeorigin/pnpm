@@ -1,20 +1,22 @@
 # @thecodeorigin/pnpm-plugin-shared
 
-Shared pnpm catalog policy for independently installable THECODEORIGIN projects.
-The editable catalog is the standard `dependencies` object in `package.json`.
+Compatibility package generated from the ecosystem root catalog. Ecosystem
+projects no longer install independently; their only editable dependency policy
+is the root `pnpm-workspace.yaml`.
 
 ## Maintain the catalog
 
-Add, update, and remove entries with ordinary pnpm commands:
+Add, update, and remove entries from the ecosystem root:
 
 ```sh
-pnpm add <package>
-pnpm update <package> --latest
-pnpm remove <package>
+pnpm add -Dw <package>
+pnpm update -w <package> --latest
+pnpm remove -Dw <package>
 ```
 
-Commit `package.json` and `pnpm-lock.yaml`. A conventional commit pushed to
-`main` is released automatically by semantic-release.
+Run `node scripts/workspace/sync-shared-catalog.mjs`, commit the root lockfile
+and the generated compatibility package, and release it only from an exact
+ecosystem commit.
 
 ## Use it in another project
 

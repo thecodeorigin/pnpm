@@ -1,5 +1,0 @@
-catalog:
-  '@thecodeorigin/auth': 0.0.7
-ignoreScripts: true
-
-minimumReleaseAge: 1440
