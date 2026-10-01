@@ -2,27 +2,26 @@
 
 const manifest = require('./package.json')
 
-function getCatalog() {
-  return manifest.catalog ?? manifest.dependencies ?? {}
+function getCatalogs() {
+  return manifest.catalogs ?? { util: manifest.catalog ?? manifest.dependencies ?? {} }
 }
 
 module.exports = {
   hooks: {
     updateConfig(config) {
       config.catalogs ??= {}
-      config.catalogs.default = {
-        ...getCatalog(),
-        ...(config.catalogs.default ?? {}),
+      for (const [name, catalog] of Object.entries(getCatalogs())) {
+        config.catalogs[name] = {
+          ...catalog,
+          ...(config.catalogs[name] ?? {}),
+        }
       }
-      config.trustPolicyExclude = [
-        '@thecodeorigin/*',
-        ...(config.trustPolicyExclude ?? []).filter(pattern => pattern !== '@thecodeorigin/*'),
-      ]
       return config
     },
 
     beforePacking(pkg) {
-      pkg.catalog = getCatalog()
+      pkg.catalogs = getCatalogs()
+      delete pkg.catalog
       delete pkg.dependencies
       delete pkg.devDependencies
       delete pkg.engines

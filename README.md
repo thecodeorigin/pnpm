@@ -1,10 +1,10 @@
 # @thecodeorigin/pnpm-plugin-shared
 
-Compatibility package generated from the ecosystem root catalog. Ecosystem
+Compatibility package generated from the ecosystem root capability catalogs. Ecosystem
 projects no longer install independently; their only editable dependency policy
 is the root `pnpm-workspace.yaml`.
 
-## Maintain the catalog
+## Maintain the catalogs
 
 Add, update, and remove entries from the ecosystem root:
 
@@ -27,18 +27,16 @@ pnpm add --config @thecodeorigin/pnpm-plugin-shared
 ```
 
 The `pnpm-plugin-*` name makes pnpm load the shared catalog hook automatically.
-Existing project catalog entries take precedence, so repositories can adopt the
-shared versions incrementally without an install changing their dependency graph.
-The shared policy also exempts packages in the trusted `@thecodeorigin/*` scope
-from pnpm's trust-policy checks while preserving project-specific exclusions.
+Existing catalog entries take precedence, so repositories can adopt each shared
+capability category incrementally without an install changing their dependency graph.
 
 Then consume shared versions normally:
 
 ```sh
-pnpm add zod@catalog:
+pnpm add zod@catalog:util
 ```
 
-The consumer's `package.json` records `"zod": "catalog:"`. Its lockfile keeps
+The consumer's `package.json` records `"zod": "catalog:util"`. Its lockfile keeps
 the exact config package version and integrity, so the project remains
 reproducible and independently installable.
 

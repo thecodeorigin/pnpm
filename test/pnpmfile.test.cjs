@@ -10,10 +10,10 @@ test('local hook packs the package without applying its catalog to itself', () =
   assert.equal(localPlugin.hooks.beforePacking, plugin.hooks.beforePacking)
 })
 
-test('adds the shared catalog and preserves project overrides', () => {
+test('adds the shared capability catalogs and preserves project entries', () => {
   const config = {
     catalogs: {
-      default: {
+      util: {
         local: '1.0.0',
         zod: '0.0.1',
       },
@@ -22,31 +22,20 @@ test('adds the shared catalog and preserves project overrides', () => {
 
   const result = plugin.hooks.updateConfig(config)
 
-  assert.equal(result.catalogs.default.local, '1.0.0')
-  assert.equal(result.catalogs.default.zod, '0.0.1')
-  assert.equal(result.catalogs.default.nuxt, '4.4.2')
+  assert.equal(result.catalogs.util.local, '1.0.0')
+  assert.equal(result.catalogs.util.zod, '0.0.1')
+  assert.equal(result.catalogs.nuxt.nuxt, '4.5.2')
 })
 
-test('trusts THECODEORIGIN packages and preserves project exclusions', () => {
-  const result = plugin.hooks.updateConfig({
-    trustPolicyExclude: ['example@1.0.0', '@thecodeorigin/*'],
-  })
-
-  assert.deepEqual(result.trustPolicyExclude, [
-    '@thecodeorigin/*',
-    'example@1.0.0',
-  ])
-})
-
-test('packs the resolved compatibility catalog without dependency fields', () => {
+test('packs the resolved compatibility catalogs without dependency fields', () => {
   const packed = plugin.hooks.beforePacking({
     dependencies: { zod: '^4.3.6' },
     devDependencies: { test: '1.0.0' },
     scripts: { test: 'node --test' },
   })
 
-  assert.equal(packed.catalog.zod, '^4.3.6')
-  assert.equal(packed.catalog.nuxt, '4.4.2')
+  assert.equal(packed.catalogs.util.zod, '^4.5.4')
+  assert.equal(packed.catalogs.nuxt.nuxt, '4.5.2')
   assert.equal(packed.dependencies, undefined)
   assert.equal(packed.devDependencies, undefined)
   assert.equal(packed.scripts, undefined)

@@ -5,13 +5,15 @@ const root = resolve(import.meta.dirname, '..')
 const output = resolve(root, 'dist')
 const source = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'))
 
-if (!source.catalog || Object.keys(source.catalog).length === 0) {
-  throw new Error('package.json catalog must contain at least one entry')
+if (!source.catalogs || Object.keys(source.catalogs).length === 0) {
+  throw new Error('package.json catalogs must contain at least one category')
 }
 
-for (const [name, version] of Object.entries(source.catalog)) {
-  if (version.startsWith('catalog:')) {
-    throw new Error(`${name} must use a literal version in the source catalog`)
+for (const catalog of Object.values(source.catalogs)) {
+  for (const [name, version] of Object.entries(catalog)) {
+    if (version.startsWith('catalog:')) {
+      throw new Error(`${name} must use a literal version in the source catalogs`)
+    }
   }
 }
 
@@ -24,7 +26,7 @@ const manifest = {
   files: source.files,
   repository: source.repository,
   publishConfig: source.publishConfig,
-  catalog: source.catalog,
+  catalogs: source.catalogs,
 }
 
 await rm(output, { recursive: true, force: true })
