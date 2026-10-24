@@ -20,7 +20,6 @@
   },
   "scripts": {
     "build:package": "node scripts/build-package.mjs",
-    "check": "node --test",
     "release": "semantic-release"
   },
   "devDependencies": {
